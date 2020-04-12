@@ -1,0 +1,10 @@
+{
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#5B0838",
+        "titleBar.activeBackground": "#7F0C4E",
+        "titleBar.activeForeground": "#FFFCFD"
+    },
+    "files.associations": {
+        "stdio.h": "c"
+    }
+}
