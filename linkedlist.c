@@ -4,7 +4,7 @@ struct list
 {
     int data;
     struct list *next;
-} *first = NULL, *last = NULL;
+} *first = NULL, *last1 = NULL, *second = NULL, *third = NULL;
 
 void create(int A[], int n)
 {
@@ -23,7 +23,23 @@ void create(int A[], int n)
         last = p;
     }
 }
-
+void create2(int B[], int n)
+{
+    int i;
+    struct list *last, *p;
+    second = (struct list *)malloc(sizeof(struct list));
+    second->data = B[0];
+    second->next = NULL;
+    last = second;
+    for (i = 1; i < n; i++)
+    {
+        p = (struct list *)malloc(sizeof(struct list));
+        p->data = B[i];
+        p->next = NULL;
+        last->next = p;
+        last = p;
+    }
+}
 struct list *search(struct list *p, int x)
 {
     struct list *q = NULL;
@@ -72,25 +88,6 @@ void insert(struct list *p, int x, int pos)
         p->next = t;
     }
 }
-void delete (struct list *p, int x)
-{
-    struct list *q = NULL;
-    while (p != NULL)
-    {
-        if (x != p->data)
-        {
-            q = p;
-            p = p->next;
-        }
-        else
-        {
-            q->next = p->next;
-            break;
-        }
-    }
-    if (p == NULL)
-        printf("INVALID \t");
-}
 
 void insertLast(int x)
 {
@@ -102,37 +99,128 @@ void insertLast(int x)
     if (first == NULL)
     {
         first = t;
-        last = t;
+        last1 = t;
     }
-    else if (last == NULL)
+    else if (last1 == NULL)
     {
         p = first;
         while (p != NULL)
         {
-            last = p;
+            last1 = p;
             p = p->next;
         }
         printf("%d", x);
-        last->next = t;
-        last = t;
+        last1->next = t;
+        last1 = t;
     }
     else
     {
-        last->next = t;
-        last = t;
+        last1->next = t;
+        last1 = t;
+    }
+}
+void rev(struct list *q, struct list *p)
+{
+    if (p != NULL)
+    {
+        rev(p, p->next);
+        p->next = q;
+    }
+    else
+    {
+        first = q;
+    }
+}
+void delete (struct list *p, int x)
+{
+    struct list *q = NULL;
+    while (p != NULL)
+    {
+        if (x != p->data)
+        {
+            q = p;
+            p = p->next;
+        }
+        else if (x == p->data)
+        {
+            if (p == first)
+            {
+                first = first->next;
+                free(p);
+                break;
+            }
+            else
+            {
+                q->next = p->next;
+                free(p);
+                break;
+            }
+        }
+    }
+    if (p == NULL)
+        printf("INVALID \t");
+}
+
+void merge(struct list *f, struct list *s)
+{
+    struct list *last = NULL;
+    if (f->data < s->data)
+    {
+        third = f;
+        f = f->next;
+        last = third;
+        last->next = NULL;
+    }
+    else if (s->data < f->data)
+    {
+        third = s;
+        s = s->next;
+        last = third;
+        last->next = NULL;
+    }
+
+    while (f && s)
+    {
+        if (f->data < s->data)
+        {
+            last->next = f;
+            last = f;
+            f = f->next;
+            last->next = NULL;
+        }
+        else
+        {
+            last->next = s;
+            last = s;
+            s = s->next;
+            last->next = NULL;
+        }
+    }
+    if (f)
+    {
+        last->next = f;
+    }
+    if (s)
+    {
+        last->next = s;
     }
 }
 
 int main()
 {
 
-    int A[] = {2, 4, 6, 8, 3, 1};
+    int A[] = {4, 6, 7, 8, 10, 11};
+    int B[] = {5, 7, 9, 12};
 
     create(A, 6);
-
-    insertLast(15);
+    create2(B, 4);
+    //rev(NULL, first);
+    merge(first, second);
+    //insertLast(15);
     //insert(first, 15, 4);
-    //delete (first, 61);
+    //delete (first, 2);
     // printf("%d ", search(first, 6)->data);
-    display(first);
+    // display(first);
+    // display(second);
+    display(third);
 }
