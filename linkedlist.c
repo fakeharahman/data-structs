@@ -205,22 +205,35 @@ void merge(struct list *f, struct list *s)
         last->next = s;
     }
 }
+void middle(struct list *p)
+{
+    struct list *q = first;
+    while (q)
+    {
+        q = q->next;
+        if (q)
+            q = q->next;
+        if (q)
+            p = p->next;
+    }
+    printf("Middle element is %d\n", p->data);
+}
 
 int main()
 {
 
-    int A[] = {4, 6, 7, 8, 10, 11};
-    int B[] = {5, 7, 9, 12};
-
-    create(A, 6);
-    create2(B, 4);
+    int A[] = {4, 6, 7, 8, 10, 11, 12};
+    //int B[] = {5, 7, 9, 12};
+    create(A, 7);
+    middle(first);
+    //create2(B, 4);
     //rev(NULL, first);
-    merge(first, second);
+    //merge(first, second);
     //insertLast(15);
     //insert(first, 15, 4);
     //delete (first, 2);
     // printf("%d ", search(first, 6)->data);
-    // display(first);
+    display(first);
     // display(second);
-    display(third);
+    //display(third);
 }
