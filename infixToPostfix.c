@@ -109,14 +109,48 @@ char *convert(char *infix)
     return postfix;
 }
 
+int eval(char *postfix)
+{
+    int x1, x2, i;
+
+    for (i = 0; postfix[i] != '\0'; i++)
+    {
+        if (isOperand(postfix[i]))
+            push(postfix[i] - '0');
+        else
+        {
+            x2 = pop();
+            x1 = pop();
+            switch (postfix[i])
+            {
+            case '+':
+                push(x1 + x2);
+                break;
+            case '-':
+                push(x1 - x2);
+                break;
+            case '*':
+                push(x1 * x2);
+                break;
+            case '/':
+                push(x1 / x2);
+                break;
+            }
+        }
+    }
+    return pop();
+}
+
 int main()
 {
-    char *infix = "a+b/c-d/e";
+    char *infix = "3+2*2-6/2";
     //push('#');
 
     char *postfix = convert(infix);
 
     printf("%s ", postfix);
+    int x = eval(postfix);
+    printf(" %d ", x);
 
     return 0;
 }
