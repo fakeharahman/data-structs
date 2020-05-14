@@ -1,61 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-struct Node
-{
-    struct tree *data;
-    struct Node *next;
-
-} *front = NULL, *rear = NULL;
-
-struct tree
-{
-    int data;
-    struct tree *lchild;
-    struct tree *rchild;
-} *root = NULL;
-
-void enqueue(struct tree *x)
-{
-    struct Node *t;
-    t = (struct Node *)malloc(sizeof(struct Node));
-    if (t == NULL)
-        printf("Queue is FUll\n");
-    else
-    {
-        t->data = x;
-        t->next = NULL;
-        if (front == NULL)
-            front = rear = t;
-        else
-        {
-            rear->next = t;
-            rear = t;
-        }
-    }
-}
-struct tree *dequeue()
-{
-    struct tree *x = NULL;
-    struct Node *t;
-
-    if (front == NULL)
-        printf("Queue is Empty\n");
-    else
-    {
-        x = front->data;
-        t = front;
-        front = front->next;
-        free(t);
-    }
-    return x;
-}
-
-int isEmpty()
-{
-    if (front == NULL)
-        return 1;
-    return 0;
-}
+#include "tree.h"
 
 void create()
 {
@@ -71,7 +16,7 @@ void create()
     while (!isEmpty())
     {
         p = dequeue();
-        printf("The left child is:");
+        printf("The left child is of %d:", p->data);
         scanf("%d", &x);
         if (x != -1)
         {
@@ -82,7 +27,7 @@ void create()
             p->lchild = t;
             enqueue(t);
         }
-        printf("The right child is:");
+        printf("The right child of %d:", p->data);
         scanf("%d", &x);
         if (x != -1)
         {
@@ -96,8 +41,59 @@ void create()
     }
 }
 
+void inorder(struct tree *p)
+{
+    if (p != NULL)
+    {
+        inorder(p->lchild);
+        printf("%d ", p->data);
+        inorder(p->rchild);
+    }
+}
+
+void inorderLoop(struct tree *t)
+{
+    struct stack s;
+    createStack(&s, 100);
+    while (t != NULL || !isEmptyS(s))
+    {
+        if (t != NULL)
+        {
+            printf("%d ", t->data);
+            push(&s, t);
+            t = t->lchild;
+        }
+        else
+        {
+            t = pop(&s);
+            t = t->rchild;
+        }
+    }
+}
+
+void lorder(struct tree *p)
+{
+    printf("%d ", p->data);
+    enqueue(p);
+    while (!isEmpty())
+    {
+        p = dequeue();
+        if (p->lchild)
+        {
+            printf("%d ", p->lchild->data);
+            enqueue(p->lchild);
+        }
+        if (p->rchild)
+        {
+            printf("%d ", p->rchild->data);
+            enqueue(p->rchild);
+        }
+    }
+}
+
 int main()
 {
     create();
+    lorder(root);
     return 0;
 }
