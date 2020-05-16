@@ -95,5 +95,6 @@ int main()
 {
     create();
     lorder(root);
+    Rsearch(root, 50);
     return 0;
 }
